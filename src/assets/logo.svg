@@ -1,0 +1,35 @@
+import React, { useState, DragEvent } from 'react';
+
+const LogoUploader: React.FC = () => {
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+      const imageUrl = URL.createObjectURL(file);
+      setLogoUrl(imageUrl);
+    }
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      className="border-2 border-dashed border-pink-400 p-6 rounded-lg text-center cursor-pointer hover:bg-pink-50"
+    >
+      {logoUrl ? (
+        <img src={logoUrl} alt="Uploaded Logo" className="mx-auto h-24 w-auto" />
+      ) : (
+        <p className="text-pink-600 font-semibold">Drag and drop your logo here</p>
+      )}
+    </div>
+  );
+};
+
+export default LogoUploader;
