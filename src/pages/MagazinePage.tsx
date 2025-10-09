@@ -93,8 +93,13 @@ const MagazinePage: React.FC = () => {
               {showFlipHTML && (
                 <div className="mt-6 transition-all duration-300">
                   <div className="bg-white rounded-lg p-4 shadow-xl border border-neutral-200">
-                            <iframe allowfullscreen="" allow="clipboard-write" scrolling="no" class="fp-iframe" style="border: 1px solid lightgray; width: 100%; height: 400px;" src="https://heyzine.com/flip-book/6699aa1a80.html"></iframe>
-                      
+                            <iframe allowfullscreen="" 
+                              allow="clipboard-write" 
+                              scrolling="no" 
+                              class="fp-iframe" 
+                              style="border: 1px solid lightgray; width: 100%; height: 400px;" 
+                              src="https://heyzine.com/flip-book/6699aa1a80.html">
+                            </iframe>
                     <p className="text-xs text-neutral-500 text-center mt-2">
                       Click and drag to flip pages, or use arrow keys to navigate
                     </p>
