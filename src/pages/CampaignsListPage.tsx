@@ -12,11 +12,105 @@ import {
   Clock,
   Users,
   ArrowRight,
-  Briefcase
+  Briefcase,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useCampaigns } from '../hooks/useCampaigns';
-import { CampaignCarousel } from '../components/campaigns/CampaignCarousel';
 
+// Campaign Carousel Component (inline)
+interface CampaignCarouselProps {
+  title: string;
+  images: string[];
+}
+
+const CampaignCarousel: React.FC<CampaignCarouselProps> = ({ title, images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <Card className="overflow-hidden">
+      <div className="p-4">
+        <h4 className="font-semibold text-neutral-800 mb-3">{title}</h4>
+        
+        <div className="relative group">
+          {/* Main Image */}
+          <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+            <img
+              src={images[currentIndex]}
+              alt={`${title} - Image ${currentIndex + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = 'https://images.pexels.com/photos/7176319/pexels-photo-7176319.jpeg?auto=compress&cs=tinysrgb&w=400';
+              }}
+            />
+            
+            {/* Navigation Arrows */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={goToPrevious}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={20} className="text-neutral-700" />
+                </button>
+                
+                <button
+                  onClick={goToNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={20} className="text-neutral-700" />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Dots Indicator */}
+          {images.length > 1 && (
+            <div className="flex justify-center gap-2 mt-3">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentIndex
+                      ? 'bg-primary-500 w-6'
+                      : 'bg-neutral-300 hover:bg-neutral-400'
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Image Counter */}
+        <div className="text-center mt-2 text-sm text-neutral-500">
+          {currentIndex + 1} / {images.length}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+// Main Component
 const CampaignsListPage: React.FC = () => {
   const { campaigns, loading } = useCampaigns();
   const [statusFilter, setStatusFilter] = useState<string>('all');
