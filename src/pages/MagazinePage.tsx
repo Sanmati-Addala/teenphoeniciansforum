@@ -94,7 +94,7 @@ const MagazinePage: React.FC = () => {
                 <div className="mt-6 transition-all duration-300">
                   <div className="bg-white rounded-lg p-4 shadow-xl border border-neutral-200">
                     <iframe
-            src="https://flipbookpdf.net/web/site/73837085fffffb5ec4b38cb9b8c77ac56fb1f954202510.pdf.html"
+            src="https://flipbookpdf.net/web/site/09e9c888810557b37b1e4fb7831e90eb1eaffce7202510.pdf.html"
                       className="w-full h-[600px] rounded-lg"
                       title="PFLY VOL IA FlipHTML Magazine"
                       frameBorder="0"
