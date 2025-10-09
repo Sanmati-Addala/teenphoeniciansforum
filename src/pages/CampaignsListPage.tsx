@@ -117,11 +117,11 @@ const CampaignsListPage: React.FC = () => {
 
   const campaignGalleries = [
     {
-      title: 'Mental Health Awareness Week',
+      title: 'Pieces of Us',
       images: ['/3767.jpeg', '/3768.jpeg', '/3770 (1).jpeg', '/3769 (1).jpeg', '/3771 (1).jpeg']
     },
     {
-      title: 'Pieces of Us',
+      title: 'Mental Health Awareness Week',
       images: ['/3767 (2).jpeg', '/3767.jpeg', '/3768.jpeg', '/3770 (1).jpeg', '/3769.jpeg', '/3771.jpeg', '/3772.jpeg', '/3773.jpeg', '/3774.jpeg']
     },
     {
