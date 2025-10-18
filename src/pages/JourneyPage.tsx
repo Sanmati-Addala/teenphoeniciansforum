@@ -67,10 +67,11 @@ I shall no longer wish for anything else!`,
 const JourneyPage: React.FC = () => {
   return (
     <Layout>
+      {/* PageHeader with gradient */}
       <PageHeader 
         title="Our Personal Journey" 
         subtitle="How we navigated teenage mental health challenges and found hope on the other side"
-        image="https://i.postimg.cc/dQC6CtS0/Copy-of-KRN06789.jpg"
+        className="bg-gradient-to-r from-green-200 to-yellow-200 text-neutral-900"
       />
       
       <div className="container-custom py-12">
@@ -186,5 +187,3 @@ const JourneyPage: React.FC = () => {
 };
 
 export default JourneyPage;
-
- 
