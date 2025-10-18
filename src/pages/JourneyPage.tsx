@@ -109,7 +109,7 @@ const JourneyPage: React.FC = () => {
         
         {/* Articles Section Link */}
         <div className="mb-16">
-          <Card className="p-8 bg-gradient-to-r from-accent-50 to-primary-50">
+          <Card className="p-8 bg-gradient-to-r from-green-200 to-yellow-200">
             <div className="text-center">
               <div className="flex justify-center mb-4">
                 <div className="p-3 bg-accent-100 rounded-full">
@@ -155,7 +155,7 @@ const JourneyPage: React.FC = () => {
                     <img 
                       src={post.image || "https://via.placeholder.com/400x300"} 
                       alt={post.title} 
-                      className="w-full h-64 md:h-full object-cover"
+                      className="w-full h-48 md:h-full object-cover"
                     />
                   </div>
                   <div className="p-6 md:w-2/3">

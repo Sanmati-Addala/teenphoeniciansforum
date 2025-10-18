@@ -5,12 +5,11 @@ import Layout from '../components/layout/Layout';
 import { PageHeader } from '../components/shared/PageHeader';
 import Card from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { 
-  Calendar, 
-  MapPin, 
-  Filter, 
-  CheckCircle2, 
-  Clock, 
+import {
+  Calendar,
+  Filter,
+  CheckCircle2,
+  Clock,
   Users,
   ArrowRight,
   Briefcase,
@@ -19,18 +18,116 @@ import {
 } from 'lucide-react';
 import { useCampaigns } from '../hooks/useCampaigns';
 
+// Campaign Carousel Component (inline)
+interface CampaignCarouselProps {
+  title: string;
+  images: string[];
+}
+
+const CampaignCarousel: React.FC<CampaignCarouselProps> = ({ title, images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <Card className="overflow-hidden">
+      <div className="p-4">
+        <h4 className="font-semibold text-neutral-800 mb-3">{title}</h4>
+        
+        <div className="relative group">
+          {/* Main Image */}
+          <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+            <img
+              src={images[currentIndex]}
+              alt={`${title} - Image ${currentIndex + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = 'https://images.pexels.com/photos/7176319/pexels-photo-7176319.jpeg?auto=compress&cs=tinysrgb&w=400';
+              }}
+            />
+            
+            {/* Navigation Arrows */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={goToPrevious}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={20} className="text-neutral-700" />
+                </button>
+                
+                <button
+                  onClick={goToNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={20} className="text-neutral-700" />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Dots Indicator */}
+          {images.length > 1 && (
+            <div className="flex justify-center gap-2 mt-3">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentIndex
+                      ? 'bg-primary-500 w-6'
+                      : 'bg-neutral-300 hover:bg-neutral-400'
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Image Counter */}
+        <div className="text-center mt-2 text-sm text-neutral-500">
+          {currentIndex + 1} / {images.length}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+// Main Component
 const CampaignsListPage: React.FC = () => {
   const { campaigns, loading } = useCampaigns();
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Sample campaign images for carousel
-  const campaignImages = [
-    'https://images.pexels.com/photos/7176319/pexels-photo-7176319.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2',
-    'https://images.pexels.com/photos/8363771/pexels-photo-8363771.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2',
-    'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2',
-    'https://images.pexels.com/photos/7149165/pexels-photo-7149165.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2',
-    'https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2'
+  const campaignGalleries = [
+    {
+      title: 'Pieces of Us',
+      images: ['/3767.jpeg', '/3768.jpeg', '/3770 (1).jpeg', '/3769 (1).jpeg', '/3771 (1).jpeg']
+    },
+    {
+      title: 'Mental Health Awareness Week - 9',
+      images: ['/3767 (2).jpeg', '/3767.jpeg', '/3768.jpeg', '/3770 (1).jpeg', '/3769.jpeg', '/3771.jpeg', '/3772.jpeg', '/3773.jpeg', '/3774.jpeg']
+    },
+    {
+      title: 'Youth Empowerment',
+      images: ['/3767 (1).jpeg', '/3767 (2).jpeg', '/3769 (1).jpeg', '/3771 (1).jpeg', '/3774.jpeg']
+    }
   ];
 
   const filteredCampaigns = campaigns.filter(campaign => {
@@ -64,13 +161,6 @@ const CampaignsListPage: React.FC = () => {
     }
   };
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % campaignImages.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + campaignImages.length) % campaignImages.length);
-  };
 
   return (
     <Layout>
@@ -88,11 +178,11 @@ const CampaignsListPage: React.FC = () => {
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h2 className="text-2xl font-semibold text-neutral-800">All Campaigns</h2>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="flex items-center px-4 py-2 border border-neutral-300 rounded-md">
                     <Filter size={16} className="text-neutral-400 mr-2" />
-                    <select 
+                    <select
                       className="bg-transparent appearance-none focus:outline-none pr-8 text-neutral-700"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
@@ -130,9 +220,9 @@ const CampaignsListPage: React.FC = () => {
                       <div className="md:flex">
                         {campaign.media_url && (
                           <div className="md:w-1/3 relative">
-                            <img 
-                              src={campaign.media_url} 
-                              alt={campaign.title} 
+                            <img
+                              src={campaign.media_url}
+                              alt={campaign.title}
                               className="w-full h-64 md:h-full object-cover"
                             />
                             <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1 ${getStatusColor(campaign.status)}`}>
@@ -141,19 +231,25 @@ const CampaignsListPage: React.FC = () => {
                             </div>
                           </div>
                         )}
-                        
-                        <div className="p-6 md:w-2/3 flex flex-col">
+
+                        <div className={`p-6 ${campaign.media_url ? 'md:w-2/3' : 'w-full'} flex flex-col`}>
                           <div className="flex-grow">
+                            <div className={`flex items-center gap-2 mb-2`}>
+                              <div className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1 ${getStatusColor(campaign.status)}`}>
+                                {getStatusIcon(campaign.status)}
+                                {campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}
+                              </div>
+                            </div>
                             <h3 className="text-2xl font-semibold mb-3 text-neutral-800">{campaign.title}</h3>
                             <p className="text-neutral-600 mb-4">{campaign.description}</p>
                           </div>
-                          
+
                           <div className="space-y-3">
                             <div className="flex items-center text-sm text-neutral-500">
                               <Calendar size={16} className="mr-2" />
                               Created {new Date(campaign.created_at).toLocaleDateString()}
                             </div>
-                            
+
                             <div className="flex gap-2">
                               <Link to={`/campaign/${campaign.id}`} className="flex-1">
                                 <Button variant="primary" className="w-full">
@@ -178,56 +274,20 @@ const CampaignsListPage: React.FC = () => {
             )}
           </div>
 
-          {/* Photo Carousel Sidebar */}
+          {/* Campaign Galleries Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8">
-              <h3 className="text-xl font-semibold text-neutral-800 mb-4">Campaign Gallery</h3>
-              <Card className="p-4">
-                <div className="relative">
-                  <div className="aspect-square overflow-hidden rounded-lg mb-4">
-                    <img 
-                      src={campaignImages[currentImageIndex]} 
-                      alt={`Campaign photo ${currentImageIndex + 1}`}
-                      className="w-full h-full object-cover transition-opacity duration-300"
-                    />
-                  </div>
-                  
-                  {/* Navigation Buttons */}
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all"
-                  >
-                    <ChevronLeft size={20} className="text-neutral-700" />
-                  </button>
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all"
-                  >
-                    <ChevronRight size={20} className="text-neutral-700" />
-                  </button>
-                  
-                  {/* Dots Indicator */}
-                  <div className="flex justify-center space-x-2 mt-4">
-                    {campaignImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          index === currentImageIndex 
-                            ? 'bg-primary-500' 
-                            : 'bg-neutral-300 hover:bg-neutral-400'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="mt-4">
-                  <p className="text-sm text-neutral-600 text-center">
-                    Photo {currentImageIndex + 1} of {campaignImages.length}
-                  </p>
-                </div>
-              </Card>
+            <div className="sticky top-8 space-y-6">
+              <h3 className="text-xl font-semibold text-neutral-800">Campaign Galleries</h3>
+              {campaignGalleries.map((gallery, index) => (
+                <motion.div
+                  key={gallery.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <CampaignCarousel title={gallery.title} images={gallery.images} />
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
