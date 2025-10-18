@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Instagram } from 'lucide-react';
+import { Heart, Instagram, Youtube, Twitter } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -24,12 +24,28 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://instagram.com/phoeniciansteen" 
+                href="https://instagram.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-neutral-500 hover:text-secondary-500 transition-colors"
               >
                 <Instagram size={20} />
+              </a>
+              <a 
+                href="https://youtube.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-neutral-500 hover:text-secondary-500 transition-colors"
+              >
+                <Youtube size={20} />
+              </a>
+              <a 
+                href="https://twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-neutral-500 hover:text-secondary-500 transition-colors"
+              >
+                <Twitter size={20} />
               </a>
             </div>
           </div>
